@@ -15,7 +15,8 @@ TESTBED_OBJ = $(patsubst %.c,$(OBJ)/%.o,$(TESTBED_SRC))
 
 all: $(BIN)/testbed
 rebuild: clean all
-clean: @rm -rf build
+clean: 
+	@rm -rf build
 run: all
 	@cd $(BIN) && ./testbed
 
