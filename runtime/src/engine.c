@@ -5,17 +5,23 @@
 
 void engine_init(Engine *engine) {
   mem_init();
+  win_init(engine->window, 600, 800, "Engine");
+
   LOG_DEBUG(ENGINE, "Initialized");
   game_init();
 }
 
 void engine_run(Engine *engine) {
-  LOG_DEBUG(ENGINE, "Running");
-  game_tick();
+  while (!win_should_close(engine->window)) {
+    win_poll_events();
+    game_tick();
+  }
 }
 
 void engine_shutdown(Engine *engine) {
   mem_shutdown();
+  win_shutdown(engine->window);
+
   LOG_DEBUG(ENGINE, "Shutdown");
   game_shutdown();
 }

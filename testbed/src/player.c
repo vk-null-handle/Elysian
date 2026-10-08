@@ -8,6 +8,6 @@ void player_init(Player *player) {
   printf("[Game] Player created\n");
 }
 
-void player_tick(Player *player) { printf("[Game] Player tick\n"); }
+void player_tick(Player *player) {}
 
 void player_destroy(Player *player) { printf("[Game] Player destroyed\n"); }

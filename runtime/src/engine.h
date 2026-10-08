@@ -1,11 +1,10 @@
 #pragma once
 #include "game.h"
 #include "defines.h"
+#include "core/window/window.h"
 
 typedef struct engine {
-  void (*game_init)(void);
-  void (*game_run)(void);
-  void (*game_shutdown)(void);
+  Window *window;
 } Engine;
 
 void engine_init(Engine* engine);
