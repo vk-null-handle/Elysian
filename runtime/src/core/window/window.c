@@ -1,5 +1,5 @@
 #include "window.h"
-#include "core/logger.h"
+#include "core/logger/logger.h"
 #include "defines.h"
 
 b8 win_init(Window *window, u32 width, u32 height, char *title) {
