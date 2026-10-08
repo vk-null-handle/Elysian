@@ -1,19 +1,18 @@
 #include "engine.h"
+#include "core/logger.h"
 #include "game.h"
-#include <stdio.h>
 
 void engine_init(Engine *engine) {
-  printf("[Engine] Initialized\n");
+  LOG_DEBUG(ENGINE, "Initialized");
   game_init();
 }
 
 void engine_run(Engine *engine) {
-  printf("[Engine] Running\n");
-  printf("[Engine] Renderer updated\n");
+  LOG_DEBUG(ENGINE, "Running");
   game_tick();
 }
 
 void engine_shutdown(Engine *engine) {
-  printf("[Engine] Shutdown\n");
+  LOG_DEBUG(ENGINE, "Shutdown");
   game_shutdown();
 }

@@ -1,4 +1,4 @@
-#include "../../runtime/src/game.h"
+#include "game.h"
 #include "player.h"
 
 // Game objects
