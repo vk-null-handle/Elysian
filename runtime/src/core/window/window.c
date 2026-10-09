@@ -48,7 +48,7 @@ VkSurfaceKHR win_create_vk_surface(Window *window, VkInstance instance) {
   return surface;
 }
 
-const char **win_get_instance_ext(u32 *count) {
+const char **win_get_vk_instance_ext(u32 *count) {
   return glfwGetRequiredInstanceExtensions(count);
 }
 
