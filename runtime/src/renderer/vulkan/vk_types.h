@@ -2,6 +2,29 @@
 #include "defines.h"
 #include <vulkan/vulkan_core.h>
 
+typedef struct vulkan_image {
+    VkImage handle;
+    VkDeviceMemory memory;
+    VkImageView view;
+    u32 width;
+    u32 height;
+} VulkanImage;
+
+typedef struct vulkan_swapchain {
+  u32 width;
+  u32 height;
+  b8 require_recreate;
+
+  VkSurfaceFormatKHR image_format;
+  VkSwapchainKHR handle;
+
+  u32 n_images;
+  VkImage *images;
+  VkImageView *image_views;
+
+  VulkanImage depth_image;
+} VulkanSwapchain;
+
 typedef struct vulkan_swapchain_support_info {
     VkSurfaceCapabilitiesKHR capabilities;
     
@@ -38,6 +61,11 @@ typedef struct vulkan_context {
   VkAllocationCallbacks* allocator;
   
   VkSurfaceKHR surface;
+  u32 framebuffer_width, framebuffer_height;
+  
+  VkSemaphore *render_complete;
+  
   VulkanDevice device;
   VulkanInstance instance;
+  VulkanSwapchain swapchain;
 } VulkanContext;
