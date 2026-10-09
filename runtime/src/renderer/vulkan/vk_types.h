@@ -2,6 +2,15 @@
 #include "defines.h"
 #include <vulkan/vulkan_core.h>
 
+#define MAX_FRAMES_IN_FLIGHT 2
+
+// Per frame resources
+typedef struct frame_resources {
+	VkCommandPool command_pool;
+	VkCommandBuffer command_buffer;
+	VkSemaphore image_acquired;
+} FrameResources;
+
 // TODO: Store shader and pipeline togther
 typedef struct vulkan_pipeline {
     VkPipeline handle;
@@ -73,7 +82,12 @@ typedef struct vulkan_context {
   VkShaderModule vert_shader;
   VkShaderModule frag_shader;
   
+  // Synchronization & frame resources
+  VkSemaphore timeline;
+  u64 next_signal_value;
   VkSemaphore *render_complete;
+  FrameResources frame_resources[MAX_FRAMES_IN_FLIGHT];
+  u64 frame_index;
   
   VulkanDevice device;
   VulkanInstance instance;
