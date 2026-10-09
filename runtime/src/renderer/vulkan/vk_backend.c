@@ -4,6 +4,7 @@
 #include "vk_instance.h"
 #include "vk_device.h"
 #include "vk_swapchain.h"
+#include "vk_pipeline.h"
 #include "vk_shader.h"
 
 #include <vulkan/vulkan_core.h>
@@ -52,10 +53,24 @@ b8 vulkan_backend_init(Window* window) {
 	}
 	LOG_DEBUG(VULKAN, "Compiled and loaded shaders");
 
+	vkcontext.pipeline.handle = vk_graphics_pipeline_create(&vkcontext);
+	if (!vkcontext.pipeline.handle) {
+		LOG_FATAL(VULKAN, "Failed to initialize the graphics pipeline");
+		return FALSE;
+	}
+	LOG_DEBUG(VULKAN, "Created graphics pipeline");
+
 	return TRUE;
 }
 
 void vulkan_backend_shutdown(void) {
+	if (vkcontext.pipeline.pipeline_layout) {
+		vkDestroyPipelineLayout(vkcontext.device.logical_dev, vkcontext.pipeline.pipeline_layout, vkcontext.allocator);
+	}
+	if (vkcontext.pipeline.handle) {
+		vkDestroyPipeline(vkcontext.device.logical_dev, vkcontext.pipeline.handle, vkcontext.allocator);
+	}
+
 	if (vkcontext.vert_shader) {
 		vkDestroyShaderModule(vkcontext.device.logical_dev, vkcontext.vert_shader, vkcontext.allocator);
 	}

@@ -2,6 +2,12 @@
 #include "defines.h"
 #include <vulkan/vulkan_core.h>
 
+// TODO: Store shader and pipeline togther
+typedef struct vulkan_pipeline {
+    VkPipeline handle;
+    VkPipelineLayout pipeline_layout;
+} VulkanPipeline;
+
 typedef struct vulkan_image {
     VkImage handle;
     VkDeviceMemory memory;
@@ -72,4 +78,5 @@ typedef struct vulkan_context {
   VulkanDevice device;
   VulkanInstance instance;
   VulkanSwapchain swapchain;
+  VulkanPipeline pipeline;
 } VulkanContext;
