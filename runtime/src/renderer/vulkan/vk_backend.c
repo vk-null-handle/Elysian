@@ -3,6 +3,7 @@
 #include "vk_instance.h"
 #include "vk_device.h"
 #include "vk_swapchain.h"
+#include "vk_utils.h"
 
 #include <vulkan/vulkan_core.h>
 
@@ -46,6 +47,26 @@ b8 vulkan_backend_init(Window* window) {
 }
 
 void vulkan_backend_shutdown(void) {
+	if (vkcontext.swapchain.handle) {
+		vk_swapchain_destroy(&vkcontext, &vkcontext.swapchain);
+	}
+
+	if (vkcontext.surface) {
+		vkDestroySurfaceKHR(vkcontext.instance.handle, vkcontext.surface, vkcontext.allocator);
+	};
+
+	if (vkcontext.device.logical_dev) {
+		vkDestroyDevice(vkcontext.device.logical_dev, vkcontext.allocator);
+	}
+
+	// Only happens if valid, so no gaurds needed
+	if (vkcontext.instance.debug_messenger) {
+		vk_funcs.destroy_debug_utils_messenger(vkcontext.instance.handle, vkcontext.instance.debug_messenger, vkcontext.allocator);
+	}
+
+	if (vkcontext.instance.handle) {
+		vkDestroyInstance(vkcontext.instance.handle, vkcontext.allocator);
+	}
 }
 
 void vulkan_backend_render_frame(RenderPacket* packet) {
