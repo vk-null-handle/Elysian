@@ -7,6 +7,7 @@ typedef struct vulkan_context {
   VkInstance instance;
   VkDebugUtilsMessengerEXT debug_messenger;
   VkAllocationCallbacks* allocator;
+  VkSurfaceKHR surface;
   
   const char** layers;
   const char** exts;

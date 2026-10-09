@@ -17,6 +17,13 @@ b8 vulkan_backend_init(Window* window) {
 	}
 	LOG_INFO(VULKAN, "Created instance");
 
+	vkcontext.surface = win_create_vk_surface(window, vkcontext.instance);
+	if (!vkcontext.surface) {
+		LOG_FATAL(VULKAN, "Failed to create surface");
+		return FALSE;
+	}
+	LOG_DEBUG(VULKAN, "Created surface");
+
 	return TRUE;
 }
 
