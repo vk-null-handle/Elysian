@@ -114,4 +114,6 @@ void vk_swapchain_create(VulkanContext* vkcontext, VulkanSwapchain* swapchain, u
 		};
 		VK_CHECK(vkCreateSemaphore(vkcontext->device.logical_dev, &sem_info, vkcontext->allocator, &vkcontext->render_complete[i]));
 	}
+
+	// NEEED DEPTH IMAGE
 }

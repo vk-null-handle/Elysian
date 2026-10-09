@@ -63,6 +63,10 @@ typedef struct vulkan_context {
   VkSurfaceKHR surface;
   u32 framebuffer_width, framebuffer_height;
   
+  // Shaders
+  VkShaderModule vert_shader;
+  VkShaderModule frag_shader;
+  
   VkSemaphore *render_complete;
   
   VulkanDevice device;

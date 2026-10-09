@@ -1,9 +1,10 @@
 #include "vk_backend.h"
 #include "core/logger/logger.h"
+#include "vk_utils.h"
 #include "vk_instance.h"
 #include "vk_device.h"
 #include "vk_swapchain.h"
-#include "vk_utils.h"
+#include "vk_shader.h"
 
 #include <vulkan/vulkan_core.h>
 
@@ -43,10 +44,25 @@ b8 vulkan_backend_init(Window* window) {
 	vk_swapchain_create(&vkcontext, &vkcontext.swapchain, vkcontext.framebuffer_width, vkcontext.framebuffer_height);
 	LOG_DEBUG(VULKAN, "Created swapchain");
 
+	vkcontext.vert_shader = vk_shader_load(&vkcontext, "shader_vert.glsl", shaderc_vertex_shader);
+	vkcontext.frag_shader = vk_shader_load(&vkcontext, "shader_frag.glsl", shaderc_fragment_shader);
+	if (!vkcontext.vert_shader || !vkcontext.frag_shader) {
+		LOG_FATAL(VULKAN, "Failed to compile shaders");
+		return FALSE;
+	}
+	LOG_DEBUG(VULKAN, "Compiled and loaded shaders");
+
 	return TRUE;
 }
 
 void vulkan_backend_shutdown(void) {
+	if (vkcontext.vert_shader) {
+		vkDestroyShaderModule(vkcontext.device.logical_dev, vkcontext.vert_shader, vkcontext.allocator);
+	}
+	if (vkcontext.frag_shader) {
+		vkDestroyShaderModule(vkcontext.device.logical_dev, vkcontext.frag_shader, vkcontext.allocator);
+	}
+
 	if (vkcontext.swapchain.handle) {
 		vk_swapchain_destroy(&vkcontext, &vkcontext.swapchain);
 	}
