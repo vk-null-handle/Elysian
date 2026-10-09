@@ -52,9 +52,9 @@ b8 vk_instance_create(VulkanContext* vkcontext) {
 	};
 
 	VK_CHECK(
-		vkCreateInstance(&inst_info, vkcontext->allocator, &vkcontext->instance));
+		vkCreateInstance(&inst_info, vkcontext->allocator, &vkcontext->instance.handle));
 
-	if (!vk_load_instance_functions(vkcontext->instance)) {
+	if (!vk_load_instance_functions(vkcontext->instance.handle)) {
 		LOG_FATAL(VULKAN, "Failed to load Vulkan debug functions");
 		return FALSE;
 	}
@@ -62,8 +62,8 @@ b8 vk_instance_create(VulkanContext* vkcontext) {
 	// Create debug messenger
 #ifdef DEBUG
 	VK_CHECK(vk_funcs.create_debug_utils_messenger(
-		vkcontext->instance, &debug_create_info, vkcontext->allocator,
-		&vkcontext->debug_messenger));
+		vkcontext->instance.handle, &debug_create_info, vkcontext->allocator,
+		&vkcontext->instance.debug_messenger));
 	LOG_DEBUG(VULKAN, "Created debug messenger");
 #endif
 	return TRUE;
