@@ -4,8 +4,14 @@
 // Game objects
 Player player;
 
-void game_init() { player_init(&player); }
+void game_init() {
+	player_init(&player);
+}
 
-void game_tick() { player_tick(&player); }
+void game_tick() {
+	player_tick(&player);
+}
 
-void game_shutdown() { player_destroy(&player); }
+void game_shutdown() {
+	player_destroy(&player);
+}
