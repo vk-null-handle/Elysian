@@ -23,6 +23,6 @@ void renderer_shutdown(void) {
 	mem_free(backend, sizeof(RendererBackend));
 }
 
-void renderer_drawframe(void) {
-	backend->render_frame(backend->packet);
+void renderer_drawframe(Window* window) {
+	backend->render_frame(backend->packet, window);
 }

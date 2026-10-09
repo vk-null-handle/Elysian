@@ -61,6 +61,22 @@ void vk_swapchain_create(VulkanContext* vkcontext, VulkanSwapchain* swapchain, u
 	VkSurfaceCapabilitiesKHR surface_caps = {};
 	VK_CHECK(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vkcontext->device.physical_dev, vkcontext->surface, &surface_caps));
 
+	// Clamp extent
+	if (surface_caps.currentExtent.width != UINT32_MAX) {
+		swapchain->width = surface_caps.currentExtent.width;
+		swapchain->height = surface_caps.currentExtent.height;
+	} else {
+		swapchain->width = CLAMP(
+			width,
+			surface_caps.minImageExtent.width,
+			surface_caps.maxImageExtent.width);
+
+		swapchain->height = CLAMP(
+			height,
+			surface_caps.minImageExtent.height,
+			surface_caps.maxImageExtent.height);
+	}
+
 	// https://docs.vulkan.org/refpages/latest/refpages/source/VkSwapchainCreateInfoKHR.html
 	VkSwapchainCreateInfoKHR swapchain_create_info = {
 		.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,

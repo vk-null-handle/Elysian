@@ -16,7 +16,7 @@ typedef enum renderer_backend_type {
 typedef struct renderer_backend {
 	b8 (*init)(Window* window);
 	void (*shutdown)(void);
-	void (*render_frame)(RenderPacket* packet);
+	void (*render_frame)(RenderPacket* packet, Window* window);
   
   RenderPacket *packet;
 } RendererBackend;
