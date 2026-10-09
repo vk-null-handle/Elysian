@@ -4,31 +4,42 @@
 
 #define MAX_FRAMES_IN_FLIGHT 2
 
+typedef enum vulkan_cmd_buffer_state {
+    COMMAND_BUFFER_STATE_READY,
+    COMMAND_BUFFER_STATE_RECORDING,
+    COMMAND_BUFFER_STATE_IN_RENDERING,
+    COMMAND_BUFFER_STATE_RECORDING_ENDED,
+    COMMAND_BUFFER_STATE_SUBMITTED,
+    COMMAND_BUFFER_STATE_NOT_ALLOCATED
+} VulkanCmdBufferState;
+
+typedef struct vulkan_command_buffer {
+    VkCommandBuffer handle;
+    VulkanCmdBufferState state;
+} VulkanCmdBuffer;
+
 // Per frame resources
 typedef struct frame_resources {
 	VkCommandPool command_pool;
-	VkCommandBuffer command_buffer;
+	VulkanCmdBuffer command_buffer;
 	VkSemaphore image_acquired;
 } FrameResources;
 
 // TODO: Store shader and pipeline togther
 typedef struct vulkan_pipeline {
     VkPipeline handle;
-    VkPipelineLayout pipeline_layout;
+    VkPipelineLayout layout;
 } VulkanPipeline;
 
 typedef struct vulkan_image {
     VkImage handle;
     VkDeviceMemory memory;
     VkImageView view;
-    u32 width;
-    u32 height;
+    u32 width, height;
 } VulkanImage;
 
 typedef struct vulkan_swapchain {
-  u32 width;
-  u32 height;
-  b8 require_recreate;
+  u32 width, height;
 
   VkSurfaceFormatKHR image_format;
   VkSwapchainKHR handle;
@@ -85,9 +96,9 @@ typedef struct vulkan_context {
   // Synchronization & frame resources
   VkSemaphore timeline;
   u64 next_signal_value;
+  u64 frame_index;
   VkSemaphore *render_complete;
   FrameResources frame_resources[MAX_FRAMES_IN_FLIGHT];
-  u64 frame_index;
   
   VulkanDevice device;
   VulkanInstance instance;

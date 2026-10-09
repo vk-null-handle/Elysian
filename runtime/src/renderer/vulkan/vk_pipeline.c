@@ -11,7 +11,7 @@ VkPipeline vk_graphics_pipeline_create(VulkanContext* vkcontext) {
 		.setLayoutCount = 0,
 		.pushConstantRangeCount = 0,
 	};
-	if (vkCreatePipelineLayout(vkcontext->device.logical_dev, &pipeline_layout_info, vkcontext->allocator, &vkcontext->pipeline.pipeline_layout) != VK_SUCCESS) {
+	if (vkCreatePipelineLayout(vkcontext->device.logical_dev, &pipeline_layout_info, vkcontext->allocator, &vkcontext->pipeline.layout) != VK_SUCCESS) {
 		LOG_FATAL(VULKAN, "Failed to create pipeline layout");
 		return NULL;
 	}
@@ -140,7 +140,7 @@ VkPipeline vk_graphics_pipeline_create(VulkanContext* vkcontext) {
 		// Set viewport and scissor states to be dynamic
 		.pDynamicState = &dynamic_state_info,
 		// Created pipeline layout not expecting and descriptor sets or push constants
-		.layout = vkcontext->pipeline.pipeline_layout,
+		.layout = vkcontext->pipeline.layout,
 		// Disabled render passes
 		.renderPass = VK_NULL_HANDLE,
 	};

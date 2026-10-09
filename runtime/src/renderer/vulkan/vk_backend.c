@@ -6,6 +6,7 @@
 #include "vk_swapchain.h"
 #include "vk_pipeline.h"
 #include "vk_sync.h"
+#include "vk_cmd_buffer.h"
 #include "vk_shader.h"
 
 #include <vulkan/vulkan_core.h>
@@ -64,6 +65,9 @@ b8 vulkan_backend_init(Window* window) {
 	vk_sync_resources_create(&vkcontext);
 	LOG_DEBUG(VULKAN, "Created sync resources");
 
+	vk_command_buffers_create(&vkcontext);
+	LOG_DEBUG(VULKAN, "Created command buffers and pool");
+
 	return TRUE;
 }
 
@@ -79,10 +83,13 @@ void vulkan_backend_shutdown(void) {
 		if (frame->image_acquired) {
 			vkDestroySemaphore(vkcontext.device.logical_dev, frame->image_acquired, vkcontext.allocator);
 		}
+		if (frame->command_pool) {
+			vkDestroyCommandPool(vkcontext.device.logical_dev, frame->command_pool, vkcontext.allocator);
+		}
 	}
 
-	if (vkcontext.pipeline.pipeline_layout) {
-		vkDestroyPipelineLayout(vkcontext.device.logical_dev, vkcontext.pipeline.pipeline_layout, vkcontext.allocator);
+	if (vkcontext.pipeline.layout) {
+		vkDestroyPipelineLayout(vkcontext.device.logical_dev, vkcontext.pipeline.layout, vkcontext.allocator);
 	}
 	if (vkcontext.pipeline.handle) {
 		vkDestroyPipeline(vkcontext.device.logical_dev, vkcontext.pipeline.handle, vkcontext.allocator);
