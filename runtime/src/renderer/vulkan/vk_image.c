@@ -8,7 +8,7 @@ static i32 find_memory_index(VulkanContext* vkcontext, u32 type_filter, u32 prop
 	vkGetPhysicalDeviceMemoryProperties(vkcontext->device.physical_dev, &memory_properties);
 
 	for (u32 i = 0; i < memory_properties.memoryTypeCount; ++i) {
-		// Check each memory type to see if its bit is set to 1.
+		// Check each memory type to see if permitted and has the required properties
 		if (type_filter & (1 << i) && (memory_properties.memoryTypes[i].propertyFlags & property_flags) == property_flags) {
 			return i;
 		}
@@ -54,19 +54,23 @@ void vk_image_create(
 
 	VK_CHECK(vkCreateImage(vkcontext->device.logical_dev, &image_create_info, vkcontext->allocator, &out_image->handle));
 
-	// Query memory requirements
+	// Query memory requirements for the image
 	VkMemoryRequirements memory_requirements;
 	vkGetImageMemoryRequirements(vkcontext->device.logical_dev, out_image->handle, &memory_requirements);
 
+	// Find the memory type needed
 	i32 memory_type = find_memory_index(vkcontext, memory_requirements.memoryTypeBits, memory_flags);
 	if (memory_type == -1) {
 		LOG_ERROR(VULKAN, "Required memory type not found, Image not valid");
 	}
 
-	// Allocate memory
-	VkMemoryAllocateInfo memory_allocate_info = {VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO};
-	memory_allocate_info.allocationSize = memory_requirements.size;
-	memory_allocate_info.memoryTypeIndex = memory_type;
+	// https://docs.vulkan.org/refpages/latest/refpages/source/VkMemoryAllocateInfo.html
+	VkMemoryAllocateInfo memory_allocate_info = {
+		.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+		.allocationSize = memory_requirements.size,
+		.memoryTypeIndex = memory_type,
+	};
+	// Allocate memory for image
 	VK_CHECK(vkAllocateMemory(vkcontext->device.logical_dev, &memory_allocate_info, vkcontext->allocator, &out_image->memory));
 
 	// Bind the memory
