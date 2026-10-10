@@ -69,8 +69,8 @@ VkPipeline vk_graphics_pipeline_create(VulkanContext* vkcontext) {
 		// Full triangles
 		.polygonMode = VK_POLYGON_MODE_FILL,
 		.cullMode = VK_CULL_MODE_BACK_BIT,
-		// Triangles vertices are counter clockwise
-		.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE,
+		// Triangles vertices are clockwise
+		.frontFace = VK_FRONT_FACE_CLOCKWISE,
 		.lineWidth = 1.0f,
 	};
 
