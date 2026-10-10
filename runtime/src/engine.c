@@ -4,13 +4,18 @@
 #include "game.h"
 #include "renderer/renderer.h"
 
-void engine_init(Engine* engine) {
+struct engine {
+	Window* window;
+};
+
+Engine* engine_init(void) {
+	Engine* e = mem_alloc(sizeof(struct engine));
 	mem_init();
-	win_init(engine->window, 600, 800, "Engine");
-	renderer_init(engine->window);
+	win_init(e->window, 600, 800, "Engine");
+	renderer_init(e->window);
 	game_init();
 
-	LOG_DEBUG(ENGINE, "Initialized");
+	return e;
 }
 
 void engine_run(Engine* engine) {

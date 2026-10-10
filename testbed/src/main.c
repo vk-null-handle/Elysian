@@ -1,9 +1,9 @@
 #include "engine.h"
 
 int main() {
-	Engine engine;
-	engine_init(&engine);
-	engine_run(&engine);
-	engine_shutdown(&engine);
+	// Create engine handle
+	Engine* engine = engine_init();
+	engine_run(engine);
+	engine_shutdown(engine);
 	return 0;
 }
