@@ -1,7 +1,7 @@
 #pragma once
 #include "defines.h"
 // TEMP
-#include "vulkan/vulkan_core.h"
+#include <vulkan/vulkan_core.h>
 
 typedef struct window Window;
 
