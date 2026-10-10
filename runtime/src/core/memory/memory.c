@@ -19,7 +19,7 @@ void mem_shutdown(void) {
 void mem_free(void* chunk, u64 size) {
 	free(chunk);
 	stats.total_allocated -= size;
-	LOG_INFO(MEMORY, "Freed %llu bytes from address: %p", size, chunk);
+	LOG_DEBUG(MEMORY, "Freed %llu bytes from address: %p", size, chunk);
 }
 
 void* mem_alloc(u64 size) {
