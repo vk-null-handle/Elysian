@@ -1,13 +1,11 @@
 #pragma once
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
 #include "defines.h"
+// TEMP
+#include "vulkan/vulkan_core.h"
 
-typedef struct window {
-  GLFWwindow *handle;
-} Window;
+typedef struct window Window;
 
-b8 win_init(Window *window, u32 width, u32 height, char *title);
+Window* win_init(u32 width, u32 height, char* title);
 void win_shutdown(Window *window);
 
 b8 win_should_close(const Window *window);

@@ -9,9 +9,14 @@ struct engine {
 };
 
 Engine* engine_init(void) {
-	Engine* e = mem_alloc(sizeof(struct engine));
 	mem_init();
-	win_init(e->window, 600, 800, "Engine");
+	Engine* e = mem_alloc(sizeof(struct engine));
+
+	e->window = win_init(600, 800, "Engine");
+	if (!e->window) {
+		LOG_FATAL(ENGINE, "Failed to create window");
+	}
+
 	renderer_init(e->window);
 	game_init();
 
@@ -30,6 +35,6 @@ void engine_shutdown(Engine* engine) {
 	game_shutdown();
 	renderer_shutdown();
 	win_shutdown(engine->window);
+	mem_free(engine, sizeof(struct engine));
 	mem_shutdown();
-	LOG_DEBUG(ENGINE, "Shutdown");
 }

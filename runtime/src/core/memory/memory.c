@@ -7,6 +7,7 @@ struct memory_stats {
 	u64 total_allocated;
 };
 
+// Global memory stats
 static struct memory_stats stats;
 
 void mem_init(void) {

@@ -1,27 +1,27 @@
 #include "window.h"
 #include "core/logger/logger.h"
-#include "defines.h"
+#include "core/memory/memory.h"
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
 
-b8 win_init(Window* window, u32 width, u32 height, char* title) {
-	if (!window || !glfwInit()) {
-		return FALSE;
-	}
+struct window {
+	GLFWwindow* handle;
+};
+
+Window* win_init(u32 width, u32 height, char* title) {
+	Window* window = mem_alloc(sizeof(struct window));
+
+	glfwInit();
 	if (!glfwVulkanSupported()) {
 		LOG_FATAL(ENGINE, "Vulkan is not supported on this system");
 		glfwTerminate();
-		return FALSE;
 	}
 
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	window->handle = glfwCreateWindow(width, height, title, NULL, NULL);
-
-	if (window->handle == NULL) {
-		LOG_ERROR(ENGINE, "Failed to create GLFW window");
-		glfwTerminate();
-		return FALSE;
-	}
 	glfwSetWindowUserPointer(window->handle, window);
-	return TRUE;
+
+	return window;
 }
 
 void win_shutdown(Window* window) {
@@ -31,6 +31,7 @@ void win_shutdown(Window* window) {
 
 	glfwDestroyWindow(window->handle);
 	glfwTerminate();
+	mem_free(window, sizeof(struct window));
 }
 
 b8 win_should_close(const Window* window) {
